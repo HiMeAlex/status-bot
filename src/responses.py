@@ -11,7 +11,7 @@ DEFAULT_PREFIX="!"
 async def get_status(ip:str) -> bool:
     ip, port = ip.split(":")
     print(ip, port)
-    await asyncio.create_subprocess_exec(f"C:/Users/alexa/Documents/VSCode/Python/OtherStuff/discord/status-bot/target/release/auto_check.exe", f"{ip}", f"{port}")
+    await asyncio.create_subprocess_exec(f"auto_check.exe", f"{ip}", f"{port}")
     with open("data/pass.json", "r") as fp:
         contents = json.load(fp)
         return contents
