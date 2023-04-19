@@ -1,3 +1,4 @@
 /target
 data/Info.txt
 src/__pycache__
+src/bot.py
