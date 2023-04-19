@@ -107,9 +107,11 @@ async def handle_responses(message:discord.Message, user_message:str, guild_id:i
                 loop = asyncio.get_event_loop()
                 loop.create_task(auto_status(message, guild_id, ip))
                 loop.run_until_complete()
+                return to_embed(f"Command: {pref}autostatus", "Is active:", "true")
             else:
                 with open("data/server.json", "r") as fp:
                     contents = json.load(fp)
                     contents["guilds"][str(guild_id)]["auto_status_active"] = False
                 with open("data/server.json", "w") as fp:
                     json.dump(contents, fp, indent=4, separators=(',',': '))
+                return to_embed(f"Command: {pref}autostatus", "Is active:", "false")
