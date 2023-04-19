@@ -12,8 +12,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "auto_check"
-version = "0.1.0"
+name = "auto_status"
+version = "1.0.0"
 dependencies = [
  "craftping",
  "json",

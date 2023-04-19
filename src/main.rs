@@ -27,7 +27,7 @@ fn main() {
 }
 
 fn pass(json: Value){
-    fs::write("src/pass.json", serde_json::to_string_pretty(&json).unwrap()).unwrap();
+    fs::write("data/pass.json", serde_json::to_string_pretty(&json).unwrap()).unwrap();
 }
 
 fn mcping(addr: &str, port: u16) -> bool {

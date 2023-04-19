@@ -10,8 +10,7 @@ DEFAULT_PREFIX="!"
 
 async def get_status(ip:str) -> bool:
     ip, port = ip.split(":")
-    print(ip, port)
-    await asyncio.create_subprocess_exec(f"auto_check.exe", f"{ip}", f"{port}")
+    await asyncio.create_subprocess_exec(f"auto_status.exe", f"{ip}", f"{port}")
     with open("data/pass.json", "r") as fp:
         contents = json.load(fp)
         return contents
@@ -56,7 +55,6 @@ async def auto_status(message:discord.Message, server:int, ip:str):
         status1 = await get_status(ip)
         await asyncio.sleep(1)
         status2 = await get_status(ip)
-        print(status1, status2)
         if status1 != status2:
             await message.channel.send(embed=to_embed(f"Auto Status for: {ip}", "Status has now changed to:", str(status2)))
 
