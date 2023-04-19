@@ -53,6 +53,7 @@ async def auto_status(message:discord.Message, server:int, ip:str, future:asynci
         if status1 != status2:
             await message.channel.send(embed=to_embed(f"Auto Status for: {ip}", "Status has now changed to:", str(status2)))
     future.set_result("Auto Status is finished")
+    return future
 
 def get_ip(guild:int) -> str:
     with open("data/server.json", 'r') as fp:
@@ -109,8 +110,7 @@ async def handle_responses(message:discord.Message, user_message:str, guild_id:i
             if is_true:
                 future = asyncio.Future()
                 loop = asyncio.get_event_loop()
-                loop.create_task(auto_status(message, guild_id, ip, future))
-                loop.run_until_complete(future)
+                loop.run_until_complete(await auto_status(message, guild_id, ip, future))
                 return to_embed(f"Command: {pref}autostatus", "Is active:", "true")
             else:
                 with open("data/server.json", "r") as fp:
