@@ -1,5 +1,5 @@
 <h1>Discord MC Status Bot</h1>
-<p>this bot is a bot for discord servers that can check the status of any MC server <br> as long as it is open to the internet.<br><br></p>
+<p>this bot is a bot for discord servers that can check the status of any MC server <br> as long as it is open to the internet.<br></p>
 <h3>To use</h3>
 <p>1: Download the code.<br>2: Unzip.<br>3: Open bot.py in a text editor or IDE that is capable of doing so.<br>4: Paste your bot's token inbetween the quotes on this line "TOKEN = "" #<-- your token here"<br>5: Lastly, run main.py.</p>
 <h3>Dependencies</h3>
