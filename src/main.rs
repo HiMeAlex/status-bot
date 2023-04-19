@@ -15,6 +15,7 @@ fn main() {
             let port: u16 = args[2].parse().unwrap();
             let pid = process::id();
             let _pid_str = format!("{pid}");
+        
             if mcping(ip, port) {
                 pass(json!(true));
             } else {
@@ -32,6 +33,7 @@ fn pass(json: Value){
 
 fn mcping(addr: &str, port: u16) -> bool {
     let ip = format!("{addr}:{port}");
+        
     if let Ok(mut stream) = TcpStream::connect(ip) {
         let _pong = ping(&mut stream, addr, port).expect("Cannot ping server");
         return true
