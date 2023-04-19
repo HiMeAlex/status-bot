@@ -72,7 +72,9 @@ async def handle_responses(message:discord.Message, user_message:str, guild_id:i
             ip = get_args(p_message)[0] 
             is_succeed = set_ip(guild_id, ip)
             if is_succeed:
-                if re.compile("/([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\:?([0-9]{1,5})?/").match(ip) or re.compile("(?!-)[A-Z\d-]{1,63}(?<!-)$").match(ip):
+                if (re.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$").match(ip) or 
+                    re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$").match(ip)):
+                    
                     return to_embed(f"Command: {pref}setip", "Succeed state:", str(True))
                 else:
                     return to_embed(f"Command: {pref}setip", "Warning:", "IP has been set but may not match these formats: ip or hostname")
