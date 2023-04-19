@@ -1,5 +1,4 @@
-import discord
-import responses
+import discord, responses
 
 async def send_message(message:str, user_message:str, guild_id:int, is_private:bool, is_command:bool):
     response = await responses.handle_responses(message, user_message, guild_id, is_command)
