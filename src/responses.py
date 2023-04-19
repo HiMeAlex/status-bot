@@ -1,4 +1,4 @@
-import asyncio, discord, json, os
+import asyncio, discord, json, os, re
 
 DEFAULT_PREFIX="!"
 
@@ -70,8 +70,12 @@ async def handle_responses(message:discord.Message, user_message:str, guild_id:i
         
         if p_message.startswith("setip"):
             ip = get_args(p_message)[0] 
-            if set_ip(guild_id, ip):
-                return to_embed(f"Command: {pref}setip", "Succeed state:", str(True))
+            is_succeed = set_ip(guild_id, ip)
+            if is_succeed:
+                if re.match("/([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\:?([0-9]{1,5})?/", ip) or re.match("(?!-)[A-Z\d-]{1,63}(?<!-)$", ip):
+                    return to_embed(f"Command: {pref}setip", "Succeed state:", str(True))
+                else:
+                    return to_embed(f"Command: {pref}setip", "Warning:", "IP has been set but may not match these formats: ip or hostname")
             else:
                 return to_embed(f"Command: {pref}setip", "Succeed state:", str(False))
         
