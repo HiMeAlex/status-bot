@@ -1,11 +1,5 @@
-import requests
-import discord
-import json
-import os
-import subprocess
-import asyncio
-import threading
-from time import sleep
+import asyncio, discord, json, os
+
 DEFAULT_PREFIX="!"
 
 async def get_status(ip:str) -> bool:
