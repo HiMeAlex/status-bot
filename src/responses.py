@@ -15,11 +15,12 @@ def set_ip(server:int, ip:str) -> bool:
             raise Exception("File not found")
         with open('data/server.json', 'r') as fp:
             contents = json.load(fp)
-            contents["guilds"][str(server)]["ip"] = ip
+            contents["guilds"] = {str(server): {"ip": ip}}
         with open('data/server.json', 'w') as fp:
             json.dump(contents, fp, indent=4, separators=(',',': '))
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 def to_embed(title:str, header:str, text:str) -> discord.Embed:
@@ -34,7 +35,7 @@ def get_args(message:str) -> list:
         args.remove('')
     return args
 
-async def auto_status(message:discord.Message, server:int, ip:str):
+async def auto_status(message:discord.Message, server:int, ip:str, future:asyncio.Future):
     with open("data/server.json", "r") as fp:
         contents = json.load(fp)
         contents["guilds"][str(server)]["auto_status_active"] = True
@@ -51,6 +52,7 @@ async def auto_status(message:discord.Message, server:int, ip:str):
         status2 = await get_status(ip)
         if status1 != status2:
             await message.channel.send(embed=to_embed(f"Auto Status for: {ip}", "Status has now changed to:", str(status2)))
+    future.set_result("Auto Status is finished")
 
 def get_ip(guild:int) -> str:
     with open("data/server.json", 'r') as fp:
@@ -69,12 +71,11 @@ async def handle_responses(message:discord.Message, user_message:str, guild_id:i
             !autostatus: automatically detects detects and sends changes to the server status""")
         
         if p_message.startswith("setip"):
-            ip = get_args(p_message)[0] 
+            ip:str = get_args(p_message)[0] 
             is_succeed = set_ip(guild_id, ip)
             if is_succeed:
-                if (re.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$").match(ip) or 
-                    re.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$").match(ip)):
-                    
+                if ((re.match('^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$', ip.split(':')[0]) and re.match('\d{1,5}', ip.split(':')[1])) != None or 
+                    re.match("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$", ip) != None):
                     return to_embed(f"Command: {pref}setip", "Succeed state:", str(True))
                 else:
                     return to_embed(f"Command: {pref}setip", "Warning:", "IP has been set but may not match these formats: ip or hostname")
@@ -106,9 +107,10 @@ async def handle_responses(message:discord.Message, user_message:str, guild_id:i
                 return to_embed(f"Command: {pref}autostatus", "Incorrect argument:", "arguments: true/ false")
             
             if is_true:
+                future = asyncio.Future()
                 loop = asyncio.get_event_loop()
-                loop.create_task(auto_status(message, guild_id, ip))
-                loop.run_until_complete()
+                loop.create_task(auto_status(message, guild_id, ip, future))
+                loop.run_until_complete(future)
                 return to_embed(f"Command: {pref}autostatus", "Is active:", "true")
             else:
                 with open("data/server.json", "r") as fp:
