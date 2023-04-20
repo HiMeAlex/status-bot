@@ -19,7 +19,7 @@ def run_discord_bot():
 
     @client.event
     async def on_message(message:discord.MessageType):
-        if message.author == client.user:
+        if message.author == client.user or message.author.bot:
             return
         
         username = str(message.author)
