@@ -5,7 +5,8 @@ DEFAULT_PREFIX="!"
 async def get_status(ip:str) -> bool:
     ip, port = ip.split(":")
     cmd=f"auto_status.exe {ip} {port}"
-    return await asyncio.create_subprocess_exec(cmd, stdout=asyncio.subprocess.PIPE).communicate()
+    proc = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE)
+    return await proc.communicate()
     
 def set_ip(server:int, ip:str) -> bool:
     try:
@@ -49,7 +50,12 @@ async def auto_status(message:discord.Message, server:int, ip:str, future:asynci
         await asyncio.sleep(1)
         status2 = await get_status(ip)
         if status1 != status2:
-            await message.channel.send(embed=to_embed(f"Auto Status for: {ip}", "Status has now changed to:", str(status2)))
+            if status2[0] == b'1':
+                await message.channel.send(embed=to_embed(f"Auto Status for: {ip}", "Status has now changed to:", 'offline'))
+            elif status2[0] == b'0':
+                await message.channel.send(embed=to_embed(f"Auto Status for: {ip}", "Status has now changed to:", 'online'))
+            else:
+                await message.channel.send(embed=to_embed(f"Auto Status for: {ip}", "Error:", "Fatal error has occured in process."))
     future.set_result("Auto Status is finished")
     return future
 
