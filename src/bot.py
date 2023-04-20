@@ -8,7 +8,7 @@ async def send_message(message:str, user_message:str, guild_id:int, is_private:b
         await message.channel.send(embed=response)
 
 def run_discord_bot():
-    TOKEN = "MTA5NTg1ODE1OTgxNTQ5MTcxNA.G5VkUD.7Xpfss-5kjz5jwBXoCJnRj-bj_5iRzbnE3vvzI" #<-- your token here
+    TOKEN = "" #<-- your token here
     intents = discord.Intents.default()
     intents.message_content = True
     client = discord.Client(intents=intents)
