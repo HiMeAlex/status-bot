@@ -4,10 +4,8 @@ DEFAULT_PREFIX="!"
 
 async def get_status(ip:str) -> bool:
     ip, port = ip.split(":")
-    await asyncio.create_subprocess_exec(f"auto_status.exe", f"{ip}", f"{port}")
-    with open("data/pass.json", "r") as fp:
-        contents = json.load(fp)
-        return contents
+    cmd=f"auto_status.exe {ip} {port}"
+    return await asyncio.create_subprocess_exec(cmd, stdout=asyncio.subprocess.PIPE).communicate()
     
 def set_ip(server:int, ip:str) -> bool:
     try:

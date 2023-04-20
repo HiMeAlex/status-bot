@@ -1,3 +1,4 @@
 /target
 src/__pycache__
 Info.txt
+data/server.json
