@@ -1,3 +1,3 @@
 cd %~dp0
-python %~dp0\src\main.py
+cmd /c python %~dp0\src\main.py
 
